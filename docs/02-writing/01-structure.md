@@ -63,6 +63,8 @@ Add a `_meta.json` file in a folder to customize it:
 }
 ```
 
+Sections and folders are collapsed in the sidebar by default. Set `"collapsed": false` to open one on load. The section holding the current page always opens.
+
 ## Links and images
 
 Link to other pages with their relative path, the same way they work on GitHub: `[Installation](../01-getting-started/01-installation.md)`. Images and other files can be relative too: `![Diagram](./diagram.png)`.

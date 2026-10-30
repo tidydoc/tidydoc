@@ -27,7 +27,7 @@ function defaultOpened (items: NavItem[], out: string[] = []) {
   return out
 }
 
-const opened = ref<string[]>(defaultOpened(site.value?.sections.flatMap(section => section.children) ?? []))
+const opened = ref<string[]>(defaultOpened(site.value?.sections ?? []))
 
 // Expand the groups leading to the current page.
 watch(() => route.path, () => {
@@ -83,7 +83,15 @@ const themeMode = computed({
       </button>
     </div>
 
-    <v-list v-if="site" v-model:opened="opened" class="sidebar__nav" color="primary" density="compact" nav>
+    <v-list
+      v-if="site"
+      v-model:opened="opened"
+      class="sidebar__nav"
+      color="primary"
+      density="compact"
+      nav
+      open-strategy="multiple"
+    >
       <template v-if="config.links.length">
         <v-list-item
           v-for="link in config.links"
@@ -107,13 +115,18 @@ const themeMode = computed({
         :to="item.page.route"
       />
 
-      <template v-for="section in site.sections" :key="section.path">
-        <div class="sidebar__section">
-          <v-icon v-if="section.icon" :icon="section.icon" size="16" />
-          {{ section.title }}
-        </div>
+      <v-list-group
+        v-for="section in site.sections"
+        :key="section.path"
+        class="sidebar__section"
+        fluid
+        :value="section.path"
+      >
+        <template #activator="{ props }">
+          <v-list-item v-bind="props" class="sidebar__section-title" :prepend-icon="section.icon" :title="section.title" />
+        </template>
         <NavTree :items="section.children" />
-      </template>
+      </v-list-group>
     </v-list>
 
     <template #append>
