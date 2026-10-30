@@ -1,0 +1,70 @@
+name: Deploy Docs
+
+# Le dossier docs/ est miroité tel quel sur le serveur via rsync --delete (les
+# fichiers supprimés du repo disparaissent aussi du serveur). Le conteneur
+# tidydoc monte ce dossier sur /content et régénère le site tout seul (inotify) :
+# pas d'image à rebuild.
+#
+# Repo public : les secrets vivent dans l'environnement "docs" (jamais exposés
+# aux PR de forks) et seul main peut être déployé.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-docs
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Rsync docs/ to server
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: docs
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Configure SSH
+        env:
+          SSH_KEY: ${{ secrets.DOCS_SSH_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.DOCS_SSH_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+          # Échoue tôt (et sans exposer la clé) si le secret est mal formaté.
+          ssh-keygen -y -f ~/.ssh/id_deploy > /dev/null && echo "deploy key OK"
+          # Pas de check "command -v rsync" côté serveur (contrairement à boxcore) :
+          # avec une clé restreinte à rrsync, toute autre commande est refusée.
+
+      - name: Deploy docs/ via rsync
+        env:
+          SSH_HOST: ${{ secrets.DOCS_SSH_HOST }}
+          SSH_USER: ${{ secrets.DOCS_SSH_USER }}
+          SSH_PORT: ${{ vars.DOCS_SSH_PORT || '22' }}
+          TARGET_PATH: ${{ secrets.DOCS_TARGET_PATH }}
+        run: |
+          set -euo pipefail
+          # Le slash final sur docs/ est essentiel : il synchronise le *contenu*
+          # du dossier dans TARGET_PATH, et non un sous-dossier docs/.
+          # Pas de -v : la liste des fichiers n'a rien à faire dans un log public.
+          rsync -rltz --delete --stats \
+            --chmod=D755,F644 \
+            --exclude='.DS_Store' \
+            -e "ssh -i ~/.ssh/id_deploy -o IdentitiesOnly=yes -o BatchMode=yes -p $SSH_PORT" \
+            docs/ "$SSH_USER@$SSH_HOST:$TARGET_PATH/"
+
+      - name: Remove SSH key
+        if: always()
+        run: rm -f ~/.ssh/id_deploy
