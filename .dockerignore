@@ -1,0 +1,6 @@
+**/node_modules
+**/dist
+**/.vitest
+.idea
+.git
+.github

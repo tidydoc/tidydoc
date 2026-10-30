@@ -1,0 +1,369 @@
+.prose {
+    font-size: 16px;
+    line-height: 1.75;
+    overflow-wrap: break-word;
+}
+
+.prose button {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+}
+
+.prose > :first-child {
+    margin-top: 0;
+}
+
+.prose h2,
+.prose h3,
+.prose h4 {
+    position: relative;
+    scroll-margin-top: 24px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+.prose h2 {
+    margin: 48px 0 16px;
+    font-size: 1.6rem;
+    line-height: 1.3;
+}
+
+.prose h3 {
+    margin: 36px 0 12px;
+    font-size: 1.25rem;
+    line-height: 1.4;
+}
+
+.prose h4 {
+    margin: 28px 0 8px;
+    font-size: 1.05rem;
+}
+
+.prose .header-anchor {
+    margin-left: 8px;
+    color: var(--tidydoc-muted);
+    font-weight: 400;
+    text-decoration: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.prose :is(h2, h3, h4):hover .header-anchor {
+    opacity: 1;
+}
+
+.prose p,
+.prose ul,
+.prose ol,
+.prose blockquote,
+.prose .table-wrapper,
+.prose .code-block {
+    margin: 0 0 20px;
+}
+
+.prose a {
+    color: rgb(var(--v-theme-primary));
+    text-decoration: underline;
+    text-decoration-color: rgba(var(--v-theme-primary), 0.35);
+    text-underline-offset: 3px;
+}
+
+.prose a:hover {
+    text-decoration-color: rgb(var(--v-theme-primary));
+}
+
+.prose ul,
+.prose ol {
+    padding-left: 24px;
+}
+
+.prose li + li,
+.prose li > ul,
+.prose li > ol {
+    margin-top: 6px;
+}
+
+.prose li > ul,
+.prose li > ol {
+    margin-bottom: 0;
+}
+
+.prose strong {
+    font-weight: 600;
+}
+
+.prose hr {
+    margin: 40px 0;
+    border: 0;
+    border-top: 1px solid var(--tidydoc-border);
+}
+
+.prose img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.prose blockquote {
+    padding: 2px 0 2px 16px;
+    border-left: 3px solid var(--tidydoc-border);
+    color: var(--tidydoc-muted);
+}
+
+.prose blockquote > :last-child {
+    margin-bottom: 0;
+}
+
+/* Inline code */
+.prose :not(pre) > code {
+    padding: 2px 6px;
+    border: 1px solid var(--tidydoc-border);
+    border-radius: 6px;
+    background: var(--tidydoc-subtle-bg);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.875em;
+}
+
+/* Code blocks */
+.prose .code-block {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--tidydoc-border);
+    border-radius: 12px;
+    background: var(--tidydoc-subtle-bg);
+}
+
+.prose .code-block pre {
+    margin: 0;
+    padding: 16px 20px;
+    overflow-x: auto;
+    background: transparent !important;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 13.5px;
+    line-height: 1.7;
+}
+
+.prose .code-block__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 8px 6px 16px;
+    border-bottom: 1px solid var(--tidydoc-border);
+    color: var(--tidydoc-muted);
+    font-size: 13px;
+}
+
+.prose .code-block__copy {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    color: var(--tidydoc-muted);
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.prose .code-block > .code-block__copy {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.prose .code-block:hover > .code-block__copy,
+.prose .code-block__copy:focus-visible {
+    opacity: 1;
+}
+
+.prose .code-block__copy:hover {
+    background: var(--tidydoc-subtle-bg);
+    color: rgb(var(--v-theme-on-surface));
+}
+
+.v-theme--light .shiki,
+.v-theme--light .shiki span {
+    color: var(--shiki-light);
+}
+
+.v-theme--dark .shiki,
+.v-theme--dark .shiki span {
+    color: var(--shiki-dark);
+}
+
+/* Tables */
+.prose .table-wrapper {
+    overflow-x: auto;
+    border: 1px solid var(--tidydoc-border);
+    border-radius: 12px;
+}
+
+.prose table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.prose th,
+.prose td {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--tidydoc-border);
+    text-align: left;
+    vertical-align: top;
+}
+
+.prose th {
+    background: var(--tidydoc-subtle-bg);
+    font-weight: 600;
+}
+
+.prose tr:last-child td {
+    border-bottom: 0;
+}
+
+/* Callouts */
+.prose .callout {
+    --callout-color: var(--v-theme-info);
+    display: flex;
+    gap: 12px;
+    margin: 0 0 20px;
+    padding: 14px 16px;
+    border: 1px solid rgba(var(--callout-color), 0.3);
+    border-radius: 12px;
+    background: rgba(var(--callout-color), 0.07);
+}
+
+.prose .callout--tip {
+    --callout-color: var(--v-theme-success);
+}
+
+.prose .callout--warning {
+    --callout-color: var(--v-theme-warning);
+}
+
+.prose .callout--danger {
+    --callout-color: var(--v-theme-error);
+}
+
+.prose .callout__icon {
+    color: rgb(var(--callout-color));
+    font-size: 20px;
+    line-height: 1.6;
+}
+
+.prose .callout__body {
+    flex: 1;
+    min-width: 0;
+    font-size: 15px;
+}
+
+.prose .callout__body > :last-child {
+    margin-bottom: 0;
+}
+
+.prose .callout__title {
+    margin-bottom: 4px;
+    font-weight: 600;
+}
+
+/* Cards */
+.prose .cards > ul {
+    display: grid;
+    grid-template-columns: repeat(var(--cards-columns, 2), minmax(0, 1fr));
+    gap: 12px;
+    margin: 0 0 20px;
+    padding: 0;
+    list-style: none;
+}
+
+.prose .cards li {
+    position: relative;
+    margin: 0;
+    padding: 16px;
+    border: 1px solid var(--tidydoc-border);
+    border-radius: 12px;
+    background: var(--tidydoc-subtle-bg);
+    color: var(--tidydoc-muted);
+    font-size: 14px;
+    line-height: 1.5;
+    transition: border-color 0.15s;
+}
+
+.prose .cards li:hover {
+    border-color: rgba(var(--v-theme-on-surface), 0.3);
+}
+
+.prose .cards li > a:first-child,
+.prose .cards li > p:first-child > a:first-child {
+    display: block;
+    margin-bottom: 4px;
+    color: rgb(var(--v-theme-on-surface));
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+/* Makes the whole card clickable. */
+.prose .cards li > a:first-child::after,
+.prose .cards li > p:first-child > a:first-child::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+}
+
+.prose .cards li > p {
+    margin: 0;
+}
+
+/* Tabs */
+.prose .tabs {
+    margin: 0 0 20px;
+}
+
+.prose .tabs__list {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 12px;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--tidydoc-border);
+}
+
+.prose .tabs__tab {
+    margin-bottom: -1px;
+    padding: 8px 12px;
+    border-bottom: 2px solid transparent;
+    color: var(--tidydoc-muted);
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.prose .tabs__tab.is-active {
+    border-bottom-color: rgb(var(--v-theme-primary));
+    color: rgb(var(--v-theme-on-surface));
+}
+
+.prose .tabs__panel {
+    display: none;
+}
+
+.prose .tabs__panel.is-active {
+    display: block;
+}
+
+.prose .tabs__panel > :last-child {
+    margin-bottom: 0;
+}
+
+@media (max-width: 599px) {
+    .prose .cards > ul {
+        grid-template-columns: 1fr;
+    }
+}

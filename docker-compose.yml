@@ -1,0 +1,14 @@
+services:
+  docs:
+    build: .
+    # image: ghcr.io/tidydoc/tidydoc:latest
+    ports:
+      - "8080:80"
+    volumes:
+      - ./docs:/content:ro
+    environment:
+      SITE_TITLE: tidydoc
+      SITE_DESCRIPTION: Documentation for your SaaS, from a folder of Markdown files.
+      COLOR_PRIMARY: "#18181b"
+      SIDEBAR_LINKS: "Website|https://tidydoc.dev|mdi-web;GitHub|https://github.com/tidydoc/tidydoc|mdi-github"
+      # WATCH_POLL_INTERVAL: 5  # uncomment on Docker Desktop if new pages don't show up
