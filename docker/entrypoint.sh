@@ -19,26 +19,6 @@ write_config() {
   } > "$WEB_ROOT/config.js"
 }
 
-html_escape() {
-  printf '%s' "$1" | sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g' -e 's/"/\&quot;/g'
-}
-
-sed_escape() {
-  printf '%s' "$1" | sed -e 's/[\\|&]/\\&/g'
-}
-
-# Title, description and favicon must be in the HTML itself for link previews.
-write_index() {
-  title=$(sed_escape "$(html_escape "${SITE_TITLE:-Documentation}")")
-  description=$(sed_escape "$(html_escape "${SITE_DESCRIPTION:-}")")
-  favicon=$(sed_escape "$(html_escape "${FAVICON_URL:-/favicon.svg}")")
-  sed -E \
-    -e "s|<title>[^<]*</title>|<title>$title</title>|" \
-    -e "s|<meta name=\"description\" content=\"[^\"]*\"|<meta name=\"description\" content=\"$description\"|" \
-    -e "s|<link rel=\"icon\" href=\"[^\"]*\"|<link rel=\"icon\" href=\"$favicon\"|" \
-    "$WEB_ROOT/index.template.html" > "$WEB_ROOT/index.html"
-}
-
 watch_content() {
   if [ "${WATCH:-true}" = "false" ]; then
     return
@@ -73,7 +53,7 @@ if [ ! -d "$CONTENT_DIR" ]; then
 fi
 
 write_config
-write_index
+# Also writes index.html, with the title, description and SEO tags (SITE_URL, OG_IMAGE_URL).
 generate.sh
 watch_content &
 

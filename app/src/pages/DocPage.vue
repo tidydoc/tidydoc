@@ -6,6 +6,7 @@ import DocContent from '@/components/DocContent.vue'
 import PageActions from '@/components/PageActions.vue'
 import TocPanel from '@/components/TocPanel.vue'
 import { config } from '@/config'
+import { rawUrl } from '@/content/slug'
 import { site } from '@/content/store'
 import { renderMarkdown } from '@/markdown'
 import NotFound from './NotFound.vue'
@@ -26,8 +27,27 @@ const siblings = computed(() => {
   return index === -1 ? {} : { prev: flat[index - 1], next: flat[index + 1] }
 })
 
+function setHeadAttribute (selector: string, attribute: string, value: string) {
+  document.head.querySelector(selector)?.setAttribute(attribute, value)
+}
+
 watchEffect(() => {
   document.title = page.value && page.value.route !== '/' ? `${page.value.title} · ${config.title}` : config.title
+  if (!page.value) return
+
+  // Tags written by docker/seo.jq for the first page loaded: keep them in sync when navigating.
+  const description = page.value.description || config.description
+  const canonical = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]')
+  const url = canonical && new URL(page.value.route, canonical.href).href
+  if (url) {
+    canonical.href = url
+    setHeadAttribute('meta[property="og:url"]', 'content', url)
+  }
+  setHeadAttribute('meta[name="description"]', 'content', description)
+  setHeadAttribute('meta[property="og:description"]', 'content', description)
+  setHeadAttribute('meta[property="og:title"]', 'content', page.value.title)
+  setHeadAttribute('meta[property="og:type"]', 'content', page.value.route === '/' ? 'website' : 'article')
+  setHeadAttribute('link[rel="alternate"][type="text/markdown"]', 'href', rawUrl(page.value.route))
 })
 </script>
 

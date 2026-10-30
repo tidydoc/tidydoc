@@ -8,6 +8,7 @@ Website: [tidydoc.dev](https://tidydoc.dev) · Contact: [hello@tidydoc.dev](mail
 - **Your brand**: set the logo, colors, links and font with environment variables.
 - **No backend, no build**: nginx serves a static app, and your Markdown is indexed when the container starts and again whenever a file changes.
 - Full-text search (`⌘K`), dark mode, syntax highlighting, callouts, cards, tabs, a table of contents, and the raw Markdown of every page at `<url>.md`.
+- **SEO**: every page is served with its own title, description, canonical URL and Open Graph tags, plus `sitemap.xml`, `robots.txt` and `llms.txt`.
 
 ## Quick start
 
@@ -59,6 +60,8 @@ See [docs/02-writing](docs/02-writing) for the full syntax.
 | --- | --- | --- |
 | `SITE_TITLE` | `Documentation` | Site name |
 | `SITE_DESCRIPTION` | | Meta description |
+| `SITE_URL` | | Public URL, e.g. `https://docs.acme.com`: enables canonical URLs, `og:url` and `sitemap.xml` |
+| `OG_IMAGE_URL` | | Link preview image (1200×630), e.g. `/content/_assets/og-image.png` |
 | `SHOW_TITLE` | `true` | Show the title next to the logo |
 | `LOGO_URL` / `LOGO_DARK_URL` | | Logo, e.g. `/content/_assets/logo.svg` |
 | `FAVICON_URL` | tidydoc icon | Favicon |
@@ -77,8 +80,9 @@ See [docs/02-writing](docs/02-writing) for the full syntax.
 
 ```
 container start
-  ├─ entrypoint.sh  → config.js (whitelisted env vars), index.html (title, meta, favicon)
-  ├─ generate.sh    → content.json (all .md + _meta.json) and /_md/<route>.md symlinks
+  ├─ entrypoint.sh  → config.js (whitelisted env vars)
+  ├─ generate.sh    → content.json (all .md + _meta.json), /_md/<route>.md symlinks,
+  │                    and seo.jq: one HTML per page (title, meta, Open Graph), sitemap.xml, robots.txt, llms.txt
   ├─ inotifywait    → re-runs generate.sh when /content changes
   └─ nginx          → static Vue 3 + Vuetify 4 app, /content/* assets, raw /<route>.md
 ```
@@ -101,7 +105,7 @@ docker compose up --build   # build the image locally
 
 ## Limitations
 
-- tidydoc is a single-page app, so search engines get less than with server-rendered docs.
+- tidydoc is a single-page app: titles, meta tags and links are served as HTML, but the page content is rendered with JavaScript (Google indexes it, some crawlers don't).
 - It must be served at the root of a domain, not under a sub-path.
 - There is no versioning and no i18n yet.
 - Raw HTML in Markdown is rendered as-is: only serve content you trust.
