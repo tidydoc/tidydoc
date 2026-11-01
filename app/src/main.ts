@@ -2,6 +2,7 @@ import '@fontsource-variable/inter'
 import './styles/main.css'
 import './styles/prose.css'
 import { createApp } from 'vue'
+import { initAnalytics } from './analytics'
 import App from './App.vue'
 import { config } from './config'
 import { loadContent } from './content/store'
@@ -22,6 +23,9 @@ function applyFont (font: string) {
 applyFont(config.font)
 document.title = config.title
 if (config.favicon) document.querySelector<HTMLLinkElement>('link[rel="icon"]')?.setAttribute('href', config.favicon)
+
+// Not awaited: analytics must never delay or break the page.
+void initAnalytics()
 
 await loadContent()
 

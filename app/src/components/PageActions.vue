@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import { track } from '@/analytics'
 import type { Page } from '@/content/nav'
 import { rawUrl } from '@/content/slug'
 
@@ -12,8 +13,13 @@ const prompt = computed(() => encodeURIComponent(`Read ${absoluteMarkdownUrl.val
 
 async function copyMarkdown () {
   await navigator.clipboard.writeText(props.page.raw)
+  track('docs_copy_markdown', { route: props.page.route })
   copied.value = true
   setTimeout(() => { copied.value = false }, 1500)
+}
+
+function trackOpen (target: 'markdown' | 'chatgpt' | 'claude') {
+  track('docs_open', { route: props.page.route, target })
 }
 </script>
 
@@ -44,9 +50,9 @@ async function copyMarkdown () {
         </v-btn>
       </template>
       <v-list density="compact" min-width="220">
-        <v-list-item :href="markdownUrl" prepend-icon="mdi-language-markdown-outline" target="_blank" title="View as Markdown" />
-        <v-list-item :href="`https://chatgpt.com/?hints=search&q=${prompt}`" prepend-icon="mdi-open-in-new" rel="noopener" target="_blank" title="Open in ChatGPT" />
-        <v-list-item :href="`https://claude.ai/new?q=${prompt}`" prepend-icon="mdi-open-in-new" rel="noopener" target="_blank" title="Open in Claude" />
+        <v-list-item :href="markdownUrl" prepend-icon="mdi-language-markdown-outline" target="_blank" title="View as Markdown" @click="trackOpen('markdown')" />
+        <v-list-item :href="`https://chatgpt.com/?hints=search&q=${prompt}`" prepend-icon="mdi-open-in-new" rel="noopener" target="_blank" title="Open in ChatGPT" @click="trackOpen('chatgpt')" />
+        <v-list-item :href="`https://claude.ai/new?q=${prompt}`" prepend-icon="mdi-open-in-new" rel="noopener" target="_blank" title="Open in Claude" @click="trackOpen('claude')" />
       </v-list>
     </v-menu>
 

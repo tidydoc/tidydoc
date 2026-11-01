@@ -13,4 +13,6 @@ services:
       # OG_IMAGE_URL: /content/_assets/og-image.png
       COLOR_PRIMARY: "#18181b"
       SIDEBAR_LINKS: "Website|https://tidydoc.dev|mdi-web;GitHub|https://github.com/tidydoc/tidydoc|mdi-github"
+      # POSTHOG_KEY: phc_xxxxxxxx  # optional analytics, see docs/01-getting-started/03-configuration.md
+      # POSTHOG_HOST: https://eu.i.posthog.com
       # WATCH_POLL_INTERVAL: 5  # uncomment on Docker Desktop if new pages don't show up

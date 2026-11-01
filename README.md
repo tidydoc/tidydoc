@@ -6,9 +6,12 @@ Website: [tidydoc.dev](https://tidydoc.dev) · Contact: [hello@tidydoc.dev](mail
 
 - **Zero config**: mount a folder of `.md` files. The navigation is built from your folders.
 - **Your brand**: set the logo, colors, links and font with environment variables.
-- **No backend, no build**: nginx serves a static app, and your Markdown is indexed when the container starts and again whenever a file changes.
-- Full-text search (`⌘K`), dark mode, syntax highlighting, callouts, cards, tabs, a table of contents, and the raw Markdown of every page at `<url>.md`.
-- **SEO**: every page is served with its own title, description, canonical URL and Open Graph tags, plus `sitemap.xml`, `robots.txt` and `llms.txt`.
+- **No backend, no build**: nginx serves a static app, and your Markdown is indexed when the container starts and again
+  whenever a file changes.
+- Full-text search (`⌘K`), dark mode, syntax highlighting, callouts, cards, tabs, a table of contents, and the raw
+  Markdown of every page at `<url>.md`.
+- **SEO**: every page is served with its own title, description, canonical URL and Open Graph tags, plus `sitemap.xml`,
+  `robots.txt` and `llms.txt`.
 
 ## Quick start
 
@@ -56,25 +59,27 @@ See [docs/02-writing](docs/02-writing) for the full syntax.
 
 ## Configuration
 
-| Variable | Default | Description |
-| --- | --- | --- |
-| `SITE_TITLE` | `Documentation` | Site name |
-| `SITE_DESCRIPTION` | | Meta description |
-| `SITE_URL` | | Public URL, e.g. `https://docs.acme.com`: enables canonical URLs, `og:url` and `sitemap.xml` |
-| `OG_IMAGE_URL` | | Link preview image (1200×630), e.g. `/content/_assets/og-image.png` |
-| `SHOW_TITLE` | `true` | Show the title next to the logo |
-| `LOGO_URL` / `LOGO_DARK_URL` | | Logo, e.g. `/content/_assets/logo.svg` |
-| `FAVICON_URL` | tidydoc icon | Favicon |
-| `COLOR_PRIMARY` / `COLOR_PRIMARY_DARK` | `#18181b` / `#fafafa` | Links, active page, table of contents |
-| `COLOR_SIDEBAR_BG` / `COLOR_SIDEBAR_BG_DARK` | `#f5f5f5` / `#111113` | Sidebar background |
-| `COLOR_BACKGROUND` / `COLOR_BACKGROUND_DARK` | `#ffffff` / `#0a0a0a` | Page background |
-| `DEFAULT_THEME` | `system` | `system`, `light` or `dark` |
-| `SIDEBAR_LINKS` | | `Title\|URL\|mdi-icon;…` |
-| `FONT_FAMILY` | `Inter` | A Google Font name, or `system` |
-| `ENABLE_SEARCH` | `true` | Search box and `⌘K` |
-| `ENABLE_COPY_MARKDOWN` | `true` | "Copy Markdown" / "Open" buttons |
-| `WATCH` | `true` | Re-index when files change |
-| `WATCH_POLL_INTERVAL` | | Poll every N seconds instead of using file events (useful when bind mounts don't forward them) |
+| Variable                                     | Default                    | Description                                                                                    |
+|----------------------------------------------|----------------------------|------------------------------------------------------------------------------------------------|
+| `SITE_TITLE`                                 | `Documentation`            | Site name                                                                                      |
+| `SITE_DESCRIPTION`                           |                            | Meta description                                                                               |
+| `SITE_URL`                                   |                            | Public URL, e.g. `https://docs.acme.com`: enables canonical URLs, `og:url` and `sitemap.xml`   |
+| `OG_IMAGE_URL`                               |                            | Link preview image (1200×630), e.g. `/content/_assets/og-image.png`                            |
+| `SHOW_TITLE`                                 | `true`                     | Show the title next to the logo                                                                |
+| `LOGO_URL` / `LOGO_DARK_URL`                 |                            | Logo, e.g. `/content/_assets/logo.svg`                                                         |
+| `FAVICON_URL`                                | tidydoc icon               | Favicon                                                                                        |
+| `COLOR_PRIMARY` / `COLOR_PRIMARY_DARK`       | `#18181b` / `#fafafa`      | Links, active page, table of contents                                                          |
+| `COLOR_SIDEBAR_BG` / `COLOR_SIDEBAR_BG_DARK` | `#f5f5f5` / `#111113`      | Sidebar background                                                                             |
+| `COLOR_BACKGROUND` / `COLOR_BACKGROUND_DARK` | `#ffffff` / `#0a0a0a`      | Page background                                                                                |
+| `DEFAULT_THEME`                              | `system`                   | `system`, `light` or `dark`                                                                    |
+| `SIDEBAR_LINKS`                              |                            | `Title\|URL\|mdi-icon;…`                                                                       |
+| `FONT_FAMILY`                                | `Inter`                    | A Google Font name, or `system`                                                                |
+| `ENABLE_SEARCH`                              | `true`                     | Search box and `⌘K`                                                                            |
+| `ENABLE_COPY_MARKDOWN`                       | `true`                     | "Copy Markdown" / "Open" buttons                                                               |
+| `POSTHOG_KEY`                                |                            | Enables [PostHog](https://posthog.com) analytics (off when empty: nothing is loaded)           |
+| `POSTHOG_HOST`                               | `https://eu.i.posthog.com` | PostHog host, e.g. `https://eu.i.posthog.com`                                                  |
+| `WATCH`                                      | `true`                     | Re-index when files change                                                                     |
+| `WATCH_POLL_INTERVAL`                        |                            | Poll every N seconds instead of using file events (useful when bind mounts don't forward them) |
 
 ## How it works
 
@@ -87,7 +92,9 @@ container start
   └─ nginx          → static Vue 3 + Vuetify 4 app, /content/* assets, raw /<route>.md
 ```
 
-The browser loads `content.json` once, then builds the navigation, renders Markdown ([markdown-it](https://github.com/markdown-it/markdown-it) and [Shiki](https://shiki.style)) and indexes the search ([MiniSearch](https://github.com/lucaong/minisearch)).
+The browser loads `content.json` once, then builds the navigation, renders Markdown
+([markdown-it](https://github.com/markdown-it/markdown-it) and [Shiki](https://shiki.style)) and indexes the search
+([MiniSearch](https://github.com/lucaong/minisearch)).
 
 ## Development
 
@@ -105,7 +112,8 @@ docker compose up --build   # build the image locally
 
 ## Limitations
 
-- tidydoc is a single-page app: titles, meta tags and links are served as HTML, but the page content is rendered with JavaScript (Google indexes it, some crawlers don't).
+- tidydoc is a single-page app: titles, meta tags and links are served as HTML, but the page content is rendered with
+  JavaScript (Google indexes it, some crawlers don't).
 - It must be served at the root of a domain, not under a sub-path.
 - There is no versioning and no i18n yet.
 - Raw HTML in Markdown is rendered as-is: only serve content you trust.

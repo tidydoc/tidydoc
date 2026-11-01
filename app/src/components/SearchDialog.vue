@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { track } from '@/analytics'
 import { site } from '@/content/store'
 import { searchSite } from '@/search'
 
@@ -9,13 +10,23 @@ const model = defineModel<boolean>({ required: true })
 const router = useRouter()
 const query = ref('')
 const selected = ref(0)
+let selectedRoute: string | null = null
 
 const results = computed(() => site.value && query.value.trim().length > 1 ? searchSite(site.value, query.value) : [])
 
 watch(results, () => { selected.value = 0 })
-watch(model, open => { if (open) query.value = '' })
+watch(model, open => {
+  if (open) {
+    query.value = ''
+    selectedRoute = null
+  } else if (query.value.trim().length > 1) {
+    // One event per search, when the dialog closes, rather than one per keystroke.
+    track('docs_search', { query: query.value.trim(), results_count: results.value.length, selected: selectedRoute })
+  }
+})
 
 function go (id: string) {
+  selectedRoute = id
   model.value = false
   router.push(id)
 }

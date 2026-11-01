@@ -23,6 +23,7 @@
     "markdown-it-anchor": "^10.0.0",
     "markdown-it-container": "^4.0.0",
     "minisearch": "^7.2.0",
+    "posthog-js": "^1.444.0",
     "shiki": "^4.5.0",
     "vue": "^3.5.44",
     "vue-router": "^5.4.0",
