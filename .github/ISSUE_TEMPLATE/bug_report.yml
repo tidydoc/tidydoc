@@ -1,0 +1,63 @@
+name: Bug report
+description: Report something that does not work as expected
+title: "fix: "
+labels: ["bug"]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Image tag or digest you are running.
+      placeholder: ghcr.io/tidydoc/tidydoc:latest
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened
+      description: What you saw. Screenshots are welcome.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What you expected to happen instead.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Include the content folder layout and the page involved, if relevant.
+      placeholder: |
+        1. Mount a folder with `01-guide/index.md`
+        2. Open `/guide`
+        3. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: config
+    attributes:
+      label: Configuration
+      description: >-
+        Your docker-compose service or `docker run` command, with environment
+        variables. Remove any secret (API keys, tokens) before posting.
+      render: yaml
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Container logs
+      description: Output of `docker logs <container>`, if relevant.
+      render: shell
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser
+      placeholder: Firefox 132, macOS

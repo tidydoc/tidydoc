@@ -1,0 +1,56 @@
+name: Feature request
+description: Propose or track a new feature for tidydoc
+title: "feat: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: One or two sentences, what the feature does.
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation
+      description: What problem does it solve? Who needs it?
+    validations:
+      required: true
+
+  - type: textarea
+    id: design
+    attributes:
+      label: Proposed design
+      description: >-
+        How it would be used. tidydoc is configured with env vars, frontmatter
+        and folder structure, so show the user-facing side first.
+      placeholder: |
+        environment:
+          NEW_VARIABLE: value
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other approaches or workarounds, and why they fall short.
+
+  - type: textarea
+    id: out-of-scope
+    attributes:
+      label: Out of scope
+      description: What this issue will NOT cover, to keep it focused.
+
+  - type: textarea
+    id: tasks
+    attributes:
+      label: Tasks (maintainers)
+      description: Leave as is, maintainers update this list.
+      value: |
+        - [ ] Implementation
+        - [ ] Tests (`app/tests`)
+        - [ ] Documentation (`docs/`)
+        - [ ] README (configuration table / limitations)
